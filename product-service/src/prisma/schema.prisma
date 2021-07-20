@@ -1,0 +1,28 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  title       String
+  description String?
+  price       Int?
+  stocks      Stock?
+
+  @@map("products")
+}
+
+model Stock {
+  id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  product_id String?  @unique @db.Uuid
+  count      Int?
+  products   Product? @relation(fields: [product_id], references: [id])
+
+  @@map("stocks")
+}

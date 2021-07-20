@@ -2,6 +2,7 @@ import type { AWS } from '@serverless/typescript';
 
 import products from '@functions/products-list';
 import getProductById from '@functions/product-item';
+import createProduct from '@functions/product-create';
 
 const serverlessConfiguration: AWS = {
     service: 'product-service',
@@ -12,7 +13,7 @@ const serverlessConfiguration: AWS = {
             includeModules: true,
         },
     },
-    plugins: ['serverless-webpack'],
+    plugins: ['serverless-dotenv-plugin', 'serverless-webpack'],
     provider: {
         name: 'aws',
         runtime: 'nodejs14.x',
@@ -26,7 +27,7 @@ const serverlessConfiguration: AWS = {
         },
         lambdaHashingVersion: '20201221',
     },
-    functions: { getProductById, products },
+    functions: { createProduct, getProductById, products },
 };
 
 module.exports = serverlessConfiguration;
