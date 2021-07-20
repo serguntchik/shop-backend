@@ -2,13 +2,13 @@ import 'source-map-support/register';
 
 import { formatErrorJSONResponse, formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { PrismaClient } from '@prisma/client';
 
-import { APIGatewayProxyResult, Handler } from "aws-lambda";
+import { APIGatewayProxyResult, Handler } from 'aws-lambda';
+
+import { createProductResponse } from '../../core/utils';
+import prisma from '../../prisma/client';
 
 export const products: Handler<void, APIGatewayProxyResult> = async (event) => {
-    const prisma = new PrismaClient();
-
     console.log('List products request', event);
 
     try {
@@ -22,9 +22,9 @@ export const products: Handler<void, APIGatewayProxyResult> = async (event) => {
             },
         });
 
-        return formatJSONResponse({ products });
+        return formatJSONResponse({ products: products.map((product) => createProductResponse(product, product.stocks!.count!)) }, 200);
     } catch (error) {
-        return formatErrorJSONResponse(500, error);
+        return formatErrorJSONResponse(error, 500);
     } finally {
         prisma.$disconnect();
     }

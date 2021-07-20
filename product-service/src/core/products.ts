@@ -1,7 +1,7 @@
-import { Product } from "./product.interface";
+import { ProductResponse } from "./product.interface";
 
 // Imitate the async nature of products, for example when they are taken from the database
-export const PRODUCTS_LIST: Product[] = [
+export const PRODUCTS_LIST: ProductResponse[] = [
     {
         "count": 6,
         "description": "A splendid Subaru auto",

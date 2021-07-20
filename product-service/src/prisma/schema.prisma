@@ -12,7 +12,7 @@ model Product {
   id          String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   title       String
   description String?
-  price       Int?
+  price       Int
   stocks      Stock?
 
   @@map("products")
@@ -21,7 +21,7 @@ model Product {
 model Stock {
   id         String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   product_id String?  @unique @db.Uuid
-  count      Int?
+  count      Int
   products   Product? @relation(fields: [product_id], references: [id])
 
   @@map("stocks")

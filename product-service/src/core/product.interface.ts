@@ -1,7 +1,7 @@
-export interface Product {
-    count: number;
-    description: string;
+export interface ProductResponse {
     id?: string;
-    price: number;
     title: string;
+    description: string | null;
+    price: number;
+    count: number;
 }

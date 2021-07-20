@@ -1,7 +1,7 @@
 import { main } from '@functions/products-list/handler';
 
-import { PRODUCTS_LIST } from '../../core/products';
-import { MOCK_CONTEXT } from "../../core/utils";
+import { PRODUCTS_LIST } from 'src/core/products';
+import { MOCK_CONTEXT } from 'src/core/testing';
 
 it('should return the correct list of products', async () => {
     const products = await PRODUCTS_LIST;

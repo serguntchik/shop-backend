@@ -10,4 +10,4 @@ jspm_packages
 .webpack
 
 .env
-.vpc.config.json
+vpc.config.json

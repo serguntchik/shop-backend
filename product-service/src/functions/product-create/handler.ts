@@ -3,12 +3,12 @@ import 'source-map-support/register';
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatErrorJSONResponse, formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { PrismaClient } from '@prisma/client';
 
 import schema from './schema';
+import { createProductResponse } from '../../core/utils';
+import prisma from '../../prisma/client';
 
 const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-    const prisma = new PrismaClient();
     const { title, description, price, count } = event.body;
 
     console.log('Create new product request', event);
@@ -25,11 +25,18 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
                     }
                 },
             },
+            include: {
+                stocks: {
+                    select: {
+                        count: true,
+                    }
+                }
+            },
         });
 
-        return formatJSONResponse(product, 201);
+        return formatJSONResponse(createProductResponse(product, product.stocks!.count!), 201);
     } catch (error) {
-        return formatErrorJSONResponse(500, error);
+        return formatErrorJSONResponse(error, 500);
     } finally {
         prisma.$disconnect();
     }
