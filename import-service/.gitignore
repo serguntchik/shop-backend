@@ -1,0 +1,13 @@
+# package directories
+.idea
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# Webpack directories
+.webpack
+
+.env
+vpc.config.json
