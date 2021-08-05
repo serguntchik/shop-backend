@@ -3,17 +3,13 @@ import 'source-map-support/register';
 import { formatErrorJSONResponse, formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 
-import { APIGatewayProxyResult, Handler } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from 'aws-lambda';
 
 import { createProductResponse } from '../../core/utils';
 import prisma from '../../prisma/client';
 
-export interface ProductItemEvent {
-    pathParameters: { productId: string };
-}
-
-export const getProductById: Handler<ProductItemEvent, APIGatewayProxyResult> = async (event) => {
-    const productId = event.pathParameters.productId;
+export const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+    const productId = event.pathParameters!.productId;
 
     console.log('Get existing product by its id request', event);
 
