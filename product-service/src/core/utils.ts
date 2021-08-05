@@ -1,17 +1,13 @@
-import { Context } from "aws-lambda/handler";
+import { Product } from '@prisma/client';
 
-export const MOCK_CONTEXT: Context = {
-    callbackWaitsForEmptyEventLoop: false,
-    functionName: 'main',
-    functionVersion: '1.0.0',
-    invokedFunctionArn: '',
-    memoryLimitInMB: '',
-    awsRequestId: '',
-    logGroupName: '',
-    logStreamName: '',
-    getRemainingTimeInMillis: () => 0,
-    done: jest.fn,
-    fail: jest.fn,
-    succeed: jest.fn,
+import { ProductResponse } from './product.interface';
 
+export const createProductResponse: (product: Product, count: number) => ProductResponse = (product: Product, count: number) => {
+    return {
+        id: product.id,
+        title: product.title,
+        description: product.description,
+        price: product.price!,
+        count,
+    }
 }
