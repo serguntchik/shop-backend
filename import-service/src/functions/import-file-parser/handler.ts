@@ -7,7 +7,7 @@ import AWS from 'aws-sdk';
 import csv from 'csv-parser';
 
 const importFileParser: Handler<S3Event, void> = async (event) => {
-    const bucket = 'product-service-dev-csv';
+    const bucket = process.env.S3_BUCKET;
     const s3 = new AWS.S3({ region: 'eu-west-1' });
 
     console.log('Parse import file request', event);

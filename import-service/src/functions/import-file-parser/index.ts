@@ -5,7 +5,7 @@ export default {
     events: [
         {
             s3: {
-                bucket: '${self:custom.s3Bucket}',
+                bucket: '${self:provider.environment.S3_BUCKET}',
                 event: 's3:ObjectCreated:*',
                 rules: [
                     {
