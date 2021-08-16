@@ -10,8 +10,8 @@ import { MOCK_CONTEXT } from '../../core/testing';
 it('should create a new product', async () => {
     const product: ProductResponse = {
         id: '7567ec4b-b10c-48c5-9345-fc73c48a80a0',
-        title: "Mazda",
-        description: "A splendid Mazda auto",
+        title: 'Mazda',
+        description: 'A splendid Mazda auto',
         price: 154,
         count: 67,
     };

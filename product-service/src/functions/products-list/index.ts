@@ -1,5 +1,4 @@
 import { handlerPath } from '@libs/handlerResolver';
-import { vpcConfig } from '@libs/lambda';
 
 export default {
     handler: `${handlerPath(__dirname)}/handler.main`,
@@ -12,5 +11,4 @@ export default {
             }
         }
     ],
-    vpc: vpcConfig,
 }

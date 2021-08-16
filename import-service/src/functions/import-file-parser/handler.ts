@@ -9,6 +9,7 @@ import csv from 'csv-parser';
 const importFileParser: Handler<S3Event, void> = async (event) => {
     const bucket = process.env.S3_BUCKET;
     const s3 = new AWS.S3({ region: 'eu-west-1' });
+    const sqs = new AWS.SQS();
 
     console.log('Parse import file request', event);
 
@@ -22,7 +23,13 @@ const importFileParser: Handler<S3Event, void> = async (event) => {
                     })
                     .createReadStream()
                     .pipe(csv())
-                    .on('data', (data) => console.log('Parsed new auto record', data))
+                    .on('data', (data) => sqs.sendMessage({
+                        QueueUrl: process.env.SQS,
+                        MessageBody: JSON.stringify(data),
+                    }, (error, data) => {
+                        console.log('error', error);
+                        console.log('data', data);
+                    }))
                     .on('end', () => resolve())
                     .on('error', (error) => reject(error));
             });

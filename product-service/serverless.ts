@@ -1,5 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
+import catalogBatchProcess from '@functions/catalog-batch-process';
 import products from '@functions/products-list';
 import getProductById from '@functions/product-item';
 import createProduct from '@functions/product-create';
@@ -8,6 +9,9 @@ const serverlessConfiguration: AWS = {
     service: 'product-service',
     frameworkVersion: '2',
     custom: {
+        catalogItemsQueue: {
+            'Fn::ImportValue': 'import-service-${sls:stage}-CatalogItemsQueue',
+        },
         webpack: {
             webpackConfig: './webpack.config.js',
             includeModules: true,
@@ -24,10 +28,42 @@ const serverlessConfiguration: AWS = {
         },
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+            SNS: {
+                Ref: 'SNSTopic',
+            },
         },
         lambdaHashingVersion: '20201221',
+        iamRoleStatements: [
+            {
+                Effect: 'Allow',
+                Action: 'sns:Publish',
+                Resource: {
+                    Ref: 'SNSTopic',
+                },
+            },
+        ],
     },
-    functions: { createProduct, getProductById, products },
+    resources: {
+        Resources: {
+            SNSTopic: {
+                Type: 'AWS::SNS::Topic',
+                Properties: {
+                    TopicName: 'create-product-topic',
+                },
+            },
+            SNSSubscription: {
+                Type: 'AWS::SNS::Subscription',
+                Properties: {
+                    Endpoint: 'fizteh.volkov@gmail.com',
+                    Protocol: 'email',
+                    TopicArn: {
+                        Ref: 'SNSTopic',
+                    },
+                },
+            },
+        },
+    },
+    functions: { catalogBatchProcess, createProduct, getProductById, products },
 };
 
 module.exports = serverlessConfiguration;

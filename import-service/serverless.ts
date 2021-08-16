@@ -24,6 +24,9 @@ const serverlessConfiguration: AWS = {
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
             S3_BUCKET: 'product-service-dev-csv',
+            SQS: {
+                Ref: 'SQSQueue',
+            },
         },
         lambdaHashingVersion: '20201221',
         iamRoleStatements: [
@@ -47,7 +50,43 @@ const serverlessConfiguration: AWS = {
                 Action: 's3:DeleteObject',
                 Resource: 'arn:aws:s3:::${self:provider.environment.S3_BUCKET}/*',
             },
+            {
+                Effect: 'Allow',
+                Action: 'sqs:SendMessage',
+                Resource: {
+                    'Fn::GetAtt': [
+                        'SQSQueue',
+                        'Arn',
+                    ],
+                },
+            },
         ],
+    },
+    resources: {
+        Resources: {
+            SQSQueue: {
+                Type: 'AWS::SQS::Queue',
+                Properties: {
+                    QueueName: 'catalog-items-queue',
+                },
+            },
+        },
+        Outputs: {
+            CatalogItemsQueueQualifiedArn: {
+                Description: 'A queue that emits products to be created in the database',
+                Value: {
+                    'Fn::GetAtt': [
+                        'SQSQueue',
+                        'Arn',
+                    ],
+                },
+                Export: {
+                    Name: {
+                        'Fn::Sub': '${AWS::StackName}-CatalogItemsQueue',
+                    },
+                },
+            },
+        },
     },
     functions: { importFileParser, importProductsFile },
 };
