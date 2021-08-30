@@ -51,13 +51,29 @@ const serverlessConfiguration: AWS = {
                     TopicName: 'create-product-topic',
                 },
             },
-            SNSSubscription: {
+            SNSSubscriptionForExpensiveAutos: {
                 Type: 'AWS::SNS::Subscription',
                 Properties: {
                     Endpoint: 'fizteh.volkov@gmail.com',
                     Protocol: 'email',
                     TopicArn: {
                         Ref: 'SNSTopic',
+                    },
+                    FilterPolicy: {
+                        batchPrice: ['high']
+                    },
+                },
+            },
+            SNSSubscriptionForCheapAutos: {
+                Type: 'AWS::SNS::Subscription',
+                Properties: {
+                    Endpoint: 'volkov.s@n-t.io',
+                    Protocol: 'email',
+                    TopicArn: {
+                        Ref: 'SNSTopic',
+                    },
+                    FilterPolicy: {
+                        batchPrice: ['low']
                     },
                 },
             },

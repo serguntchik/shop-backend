@@ -40,10 +40,18 @@ const catalogBatchProcess: Handler<SQSEvent, void> = async (event) => {
             }));
         }
 
+        const totalPrice = savedAutos.reduce((total, auto) => total + auto.price, 0);
+
         sns.publish({
             Subject: 'New autos have been added to the database',
             Message: JSON.stringify(savedAutos),
             TopicArn: process.env.SNS,
+            MessageAttributes: {
+                batchPrice: {
+                    DataType: 'String',
+                    StringValue: totalPrice > 30 ? 'high': 'low',
+                },
+            },
         }, (error) => {
             if (error) {
                 console.log('Failed to publish the autos to sns', error);
