@@ -34,7 +34,7 @@ const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
             },
         });
 
-        return formatJSONResponse(createProductResponse(product, product.stocks!.count!), 201);
+        return formatJSONResponse(createProductResponse(product, product.stocks!.count), 201);
     } catch (error) {
         return formatErrorJSONResponse(error, 500);
     } finally {

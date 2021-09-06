@@ -28,7 +28,7 @@ export const getProductById: Handler<APIGatewayProxyEvent, APIGatewayProxyResult
         });
 
         return product
-            ? formatJSONResponse({ product: createProductResponse(product, product.stocks!.count!) }, 200)
+            ? formatJSONResponse({ product: createProductResponse(product, product.stocks!.count) }, 200)
             : formatErrorJSONResponse('Product not found', 404);
     } catch (error) {
         return formatErrorJSONResponse(error, 500);

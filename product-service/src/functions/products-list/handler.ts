@@ -22,7 +22,7 @@ export const products: Handler<void, APIGatewayProxyResult> = async (event) => {
             },
         });
 
-        return formatJSONResponse({ products: products.map((product) => createProductResponse(product, product.stocks!.count!)) }, 200);
+        return formatJSONResponse({ products: products.map((product) => createProductResponse(product, product.stocks!.count)) }, 200);
     } catch (error) {
         return formatErrorJSONResponse(error, 500);
     } finally {

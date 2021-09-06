@@ -1,5 +1,4 @@
 import { handlerPath } from '@libs/handlerResolver';
-import { vpcConfig } from '@libs/lambda';
 
 import schema from './schema';
 
@@ -19,5 +18,4 @@ export default {
             }
         }
     ],
-    vpc: vpcConfig,
 }
