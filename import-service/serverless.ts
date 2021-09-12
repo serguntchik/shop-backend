@@ -7,6 +7,9 @@ const serverlessConfiguration: AWS = {
     service: 'import-service',
     frameworkVersion: '2',
     custom: {
+        importProductsAuthorizerLambda: {
+            'Fn::ImportValue': 'authorization-service-${sls:stage}-ImportProductsAuthorizerLambda',
+        },
         webpack: {
             webpackConfig: './webpack.config.js',
             includeModules: true,
@@ -64,6 +67,34 @@ const serverlessConfiguration: AWS = {
     },
     resources: {
         Resources: {
+            ApiGatewayUnauthorizedResponse: {
+                Type: 'AWS::ApiGateway::GatewayResponse',
+                Properties: {
+                    ResponseParameters: {
+                        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+                        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+                    },
+                    ResponseType: 'UNAUTHORIZED',
+                    RestApiId: {
+                        Ref: 'ApiGatewayRestApi',
+                    },
+                    StatusCode: '401',
+                },
+            },
+            ApiGatewayForbiddenResponse: {
+                Type: 'AWS::ApiGateway::GatewayResponse',
+                Properties: {
+                    ResponseParameters: {
+                        'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+                        'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+                    },
+                    ResponseType: 'ACCESS_DENIED',
+                    RestApiId: {
+                        Ref: 'ApiGatewayRestApi',
+                    },
+                    StatusCode: '403',
+                },
+            },
             SQSQueue: {
                 Type: 'AWS::SQS::Queue',
                 Properties: {

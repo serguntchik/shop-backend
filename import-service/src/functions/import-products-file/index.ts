@@ -15,6 +15,13 @@ export default {
                         },
                     },
                 },
+                authorizer: {
+                    name: 'tokenAuthorizer',
+                    arn: '${self:custom.importProductsAuthorizerLambda}',
+                    resultTtlInSeconds: 0,
+                    identitySource: 'method.request.header.Authorization',
+                    type: 'token',
+                },
             },
         },
     ],
