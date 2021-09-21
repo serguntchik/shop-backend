@@ -8,6 +8,8 @@ import { APIGatewayProxyEvent } from 'aws-lambda/trigger/api-gateway-proxy';
 import AWS from 'aws-sdk';
 
 const importProductsFile: Handler<APIGatewayProxyEvent, APIGatewayProxyResult> = async (event) => {
+    console.log('Import products file request', event);
+
     const s3 = new AWS.S3({ region: 'eu-west-1' });
     const params = {
         Bucket: process.env.S3_BUCKET,
