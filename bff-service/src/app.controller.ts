@@ -1,6 +1,6 @@
-import { All, Controller, Param, Req } from '@nestjs/common';
+import { All, Controller, Param, Req, Res } from '@nestjs/common';
 
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 import { AppService } from './app.service';
 
@@ -9,12 +9,12 @@ export class AppController {
     constructor(private readonly appService: AppService) {}
 
     @All(':serviceName')
-    async callService(@Param('serviceName') serviceName: string, @Req() request: Request) {
+    async callService(@Param('serviceName') serviceName: string, @Req() request: Request, @Res() response: Response) {
         try {
             const result = await this.appService.callService(serviceName, request);
-            return request.res.status(result.status).json(result.data)
+            response.status(result.status).json(result.data)
         } catch (error) {
-            return request.res.status(error.response.status).json(error.message);
+            response.status(error.response.status).json(error.response.data);
         }
     }
 }
