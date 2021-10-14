@@ -25,8 +25,10 @@ export class AppService {
 
         if (!serviceUrl) {
             return Promise.reject({
-                response: { status: HttpStatus.BAD_GATEWAY },
-                message: 'Cannot process request',
+                response: {
+                    status: HttpStatus.BAD_GATEWAY,
+                    data: 'Cannot process request'
+                },
             });
         }
 
