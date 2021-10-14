@@ -1,4 +1,4 @@
-import { All, Controller, Param, Req, Res } from '@nestjs/common';
+import { All, Controller, Get, HttpStatus, Param, Req, Res } from '@nestjs/common';
 
 import { Request, Response } from 'express';
 
@@ -7,6 +7,14 @@ import { AppService } from './app.service';
 @Controller()
 export class AppController {
     constructor(private readonly appService: AppService) {}
+
+    @Get('')
+    healthCheck(): any {
+        return {
+            statusCode: HttpStatus.OK,
+            message: 'OK',
+        };
+    }
 
     @All(':serviceName')
     async callService(@Param('serviceName') serviceName: string, @Req() request: Request, @Res() response: Response) {
