@@ -4,6 +4,8 @@ import catalogBatchProcess from '@functions/catalog-batch-process';
 import products from '@functions/products-list';
 import getProductById from '@functions/product-item';
 import createProduct from '@functions/product-create';
+import editProduct from '@functions/product-edit';
+import deleteProduct from '@functions/product-delete';
 
 const serverlessConfiguration: AWS = {
     service: 'product-service',
@@ -93,7 +95,7 @@ const serverlessConfiguration: AWS = {
             },
         },
     },
-    functions: { catalogBatchProcess, createProduct, getProductById, products },
+    functions: { catalogBatchProcess, createProduct, deleteProduct, editProduct, getProductById, products },
 };
 
 module.exports = serverlessConfiguration;
